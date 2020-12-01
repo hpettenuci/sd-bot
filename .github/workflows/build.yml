@@ -4,8 +4,6 @@ on:
     tags:
     - '*'
 env:
-  PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
-  SERVICE_KEY: ${{ secrets.GCP_SERVICE_KEY }}
   IMAGE: sd-bot
   REGISTRY: gcr.id
 
@@ -18,11 +16,12 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
     # Setup gcloud CLI
-    - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+    - name: Set up Cloud SDK
+      uses: google-github-actions/setup-gcloud
       with:
-        version: '290.0.1'
-        service_account_key: $SERVICE_KEY
-        project_id: $PROJECT_ID
+        project_id: ${{ secrets.GCP_PROJECT_ID }}
+        service_account_key: ${{ secrets.GCP_SERVICE_KEY }}
+        
     # Configure Docker to use the gcloud command-line tool as a credential
     # helper for authentication
     - run: |-
