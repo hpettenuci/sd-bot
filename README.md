@@ -1,17 +1,15 @@
 ![Build and Push to GCR](https://github.com/hpettenuci/sd-bot/workflows/Build%20and%20Push%20to%20GCR/badge.svg)
 
-# Definition
-
-Created: May 11, 2020 11:29 PM
-Updated: Dec 1, 2020 3:49 PM
-
 # Shotgun Diaries Discord Bot
 
 This is a Discord Bot to help masters and players on Shootgun Diaries RPG campaigns using Discord.
 
 ---
 
-[Bot Functions](https://www.notion.so/6de011a5e8494fc0a37f87588bbb08e6)
+## Bot Features
+
+- Roll Action Dices - !sd-resource <qty fear dice> <qty bonus>
+- Roll Resource Dices - !sd-action <qty action dices> <qty fear dices> <qty bonus>
 
 ## Future Features
 
