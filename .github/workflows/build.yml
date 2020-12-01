@@ -5,7 +5,7 @@ on:
     - '*'
 env:
   IMAGE: sd-bot
-  REGISTRY: gcr.id
+  REGISTRY: gcr.io
 
 jobs:
   setup-build-publish:
