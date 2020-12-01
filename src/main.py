@@ -10,8 +10,8 @@ class SdBot:
     }
 
     def startBot(self):
-       discordbot = DiscordBot()       
-       discordbot.startBot()
+        discordbot = DiscordBot()       
+        discordbot.startBot()
 
 if __name__ == '__main__':
     sdBot = SdBot()
