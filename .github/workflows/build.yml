@@ -5,7 +5,7 @@ on:
     - '*'
 env:
   PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
-  SERVICE_KEY: ${{ secrets.SERVICE_KEY }}
+  SERVICE_KEY: ${{ secrets.GCP_SERVICE_KEY }}
   IMAGE: sd-bot
   REGISTRY: gcr.id
 
@@ -21,7 +21,7 @@ jobs:
     - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
       with:
         version: '290.0.1'
-        service_account_key: ${{ secrets.GKE_SA_KEY }}
+        service_account_key: $SERVICE_KEY
         project_id: $PROJECT_ID
     # Configure Docker to use the gcloud command-line tool as a credential
     # helper for authentication
