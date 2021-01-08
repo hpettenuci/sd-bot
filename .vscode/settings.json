@@ -1,0 +1,12 @@
+{
+    "editor.fontFamily": "'Fira Code',Consolas, 'Courier New', monospace",
+    "editor.fontLigatures": true,
+    "explorer.sortOrder": "type",
+    "files.trimFinalNewlines": true,
+    "workbench.editor.highlightModifiedTabs": true,
+    "conventionalCommits.scopes": [
+        "docker",
+        "discord-bot"
+    ],
+    "conventionalCommits.autoCommit": false
+}
