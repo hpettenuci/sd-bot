@@ -1,4 +1,4 @@
-![Build and Push to GCR](https://github.com/hpettenuci/sd-bot/workflows/Build%20and%20Push%20to%20GCR/badge.svg)
+![Build and Push to GCR](https://github.com/hpettenuci/sd-bot/workflows/Build%20and%20Push%20to%20GCR/badge.svg) [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-blue.svg)](https://conventionalcommits.org)
 
 # Shotgun Diaries Discord Bot
 
