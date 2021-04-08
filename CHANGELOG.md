@@ -1,10 +1,13 @@
 # Changelog
-All notable changes to this project will be documented in this file.
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-## [Unreleased]
+### [1.0.1](https://github.com/hpettenuci/sd-bot/compare/1.0.0...1.0.1) (2021-04-08)
+
+
+### Bug Fixes
+
+* improved command error messages ([b1a94ef](https://github.com/hpettenuci/sd-bot/commit/b1a94efde4dd4596759a9fef9ca002b771891d4c))
 
 ## [1.0.0] - 2020-12-01
 ### Changed
