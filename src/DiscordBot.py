@@ -52,15 +52,20 @@ class DiscordBot:
         except:
             print(self.errorHandleMessages[1002])
             return False
-        
     
+    @staticmethod   
+    def getBot():
+        return DiscordBot.BOT
+    
+    @staticmethod
     @BOT.event
-    async def on_ready(self):
-        await self.BOT.change_presence(activity=Game(name="The ShotGun Diaries RPG"))
+    async def on_ready():
+        await DiscordBot.getBot().change_presence(activity=Game(name="The ShotGun Diaries RPG"))
         print("Bot Online!")
         
+    @staticmethod
     @BOT.event
-    async def on_command_error(ctx):   
+    async def on_command_error(ctx,error):   
         print(ctx.message)
         print(ctx.command)
         returnMessage = "- Command Error " + ctx.prefix + ctx.command.name + "\n- Type !sd-help " + ctx.command.name + " to get instructions!"
