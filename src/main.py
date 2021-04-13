@@ -1,16 +1,13 @@
-from DiscordBot import DiscordBot
-from configparser import ConfigParser
+from src.DiscordBot import DiscordBot
 
 
 class SdBot:
     # DEFAULT CONSTANT VALUES
-
     errorHandleMessages = {
-
     }
 
     def startBot(self):
-        discordbot = DiscordBot()       
+        discordbot = DiscordBot()
         discordbot.startBot()
 
 if __name__ == '__main__':
