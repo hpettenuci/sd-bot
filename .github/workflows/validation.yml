@@ -71,11 +71,3 @@ jobs:
     - name: Push result to Testspace server
       run: |
         testspace reports/*.xml
-
-#    - name: Upload to Codecov
-#      uses: codecov/codecov-action@v1.3.2
-#      with:
-#        token: ${{ secrets.CODEDOV_TOKEN }}
-#        directory: reports
-#        flags: pytest
-#        fail_ci_if_error: false
