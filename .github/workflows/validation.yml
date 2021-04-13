@@ -1,15 +1,14 @@
 name: PR Validation
 on:
-  push:
-    tags:
-    - '*'
+  pull_request:
+    branches: [ main ]
 
 env:
   PYTHON_VERSION: 3.8
 
 jobs:
-  setup-build-publish:
-    name: Setup, Build, Publish
+  validation:
+    name: PR Validation
     runs-on: ubuntu-latest
 
     steps:
