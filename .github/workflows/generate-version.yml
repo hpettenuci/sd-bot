@@ -3,11 +3,14 @@ on:
   push:
     branches: [ main ]
 
-jobs:
-  version-generate:
-    name: Generate Version
-    runs-on: ubuntu-latest
+env:
+  IMAGE: sd-bot
+  REGISTRY: gcr.io
 
+jobs:
+  setup-build-publish:
+    name: Setup, Build, Publish
+    runs-on: ubuntu-latest
     steps:
     - name: Checkout
       uses: actions/checkout@v2
@@ -24,7 +27,7 @@ jobs:
         git push --follow-tags
         echo ::set-output name=tag_name::$(git describe HEAD --abbrev=0)
         
-    - name: create release
+    - name: Create Release
       uses: actions/create-release@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -32,3 +35,28 @@ jobs:
         release_name: Release ${{ steps.bump_version.outputs.tag_name }}
         tag_name: ${{ steps.bump_version.outputs.tag_name }}
         body_path: CHANGELOG.md
+
+    # Setup gcloud CLI
+    - name: Set up Cloud SDK
+      uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+      with:
+        version: '290.0.1'
+        project_id: ${{ secrets.GCP_PROJECT_ID }}
+        service_account_key: ${{ secrets.GCP_SERVICE_KEY }}
+        
+    # Configure Docker to use the gcloud command-line tool as a credential
+    # helper for authentication
+    - run: |-
+        gcloud --quiet auth configure-docker    
+    # Build the Docker image
+    - name: Build
+      run: |-
+        docker build \
+          --tag "$REGISTRY/${{ secrets.GCP_PROJECT_ID }}/$IMAGE:${{ steps.bump_version.outputs.tag_name }}" \
+          --build-arg GITHUB_SHA="$GITHUB_SHA" \
+          --build-arg GITHUB_REF="$GITHUB_REF" \
+          .
+    # Push the Docker image to Google Container Registry
+    - name: Publish
+      run: |-
+        docker push "$REGISTRY/${{ secrets.GCP_PROJECT_ID }}/$IMAGE:${{ steps.bump_version.outputs.tag_name }}"
