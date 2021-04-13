@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.2](https://github.com/hpettenuci/sd-bot/compare/1.0.1...1.0.2) (2021-04-13)
+
+
+### Bug Fixes
+
+* improve dice throw method ([cd8265e](https://github.com/hpettenuci/sd-bot/commit/cd8265e5f54734b840386a6045894f16b80ed391))
+
 ### [1.0.1](https://github.com/hpettenuci/sd-bot/compare/1.0.0...1.0.1) (2021-04-08)
 
 
