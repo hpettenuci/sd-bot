@@ -1,11 +1,11 @@
-name: PR Validation
+name: Generate Version
 on:
   push:
     branches: [ main ]
 
 jobs:
-  validation:
-    name: PR Validation
+  version-generate:
+    name: Generate Version
     runs-on: ubuntu-latest
 
     steps:
@@ -17,7 +17,7 @@ jobs:
     - name: Bump Version
       id: bump_version
       run: |
-        npm install -g standard-version@9.1.0
+        sudo npm install -g standard-version@9.1.0
         git config --global user.email "sd@bot.com"
         git config --global user.name "sd-bot"
         standard-version -t ''

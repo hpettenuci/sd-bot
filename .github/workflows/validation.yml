@@ -1,5 +1,7 @@
 name: PR Validation
 on:
+  push:
+    branches: [ main ]      
   pull_request:
     branches: [ main ]
   schedule:
@@ -60,10 +62,20 @@ jobs:
       run: |
         pytest --doctest-modules --junitxml=reports/test-results.xml --cov=./ --cov-report=xml:reports/coverage.xml --cov-config=.coveragerc
 
-    - name: Upload to Codecov
-      uses: codecov/codecov-action@v1.3.2
+    - uses: testspace-com/setup-testspace@v1
+      name: Install Testspace
       with:
-        token: ${{ secrets.CODEDOV_TOKEN }}
-        directory: reports
-        flags: pytest
-        fail_ci_if_error: false
+        domain: hpettenuci
+        token: ${{ secrets.TESTSPACE_TOKEN }}
+
+    - name: Push result to Testspace server
+      run: |
+        testspace reports/*.xml
+
+#    - name: Upload to Codecov
+#      uses: codecov/codecov-action@v1.3.2
+#      with:
+#        token: ${{ secrets.CODEDOV_TOKEN }}
+#        directory: reports
+#        flags: pytest
+#        fail_ci_if_error: false
