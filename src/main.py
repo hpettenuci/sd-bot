@@ -6,9 +6,15 @@ class SdBot:
     }
 
     def startBot(self):        
-        discordbot = DiscordBot()
-        discordbot.startBot()
+        try:
+            discordbot = DiscordBot()
+            discordbot.startBot()
+        except Exception as error:
+            raise error
 
 if __name__ == '__main__':
-    sdBot = SdBot()
-    sdBot.startBot()
+    try:
+        sdBot = SdBot()
+        sdBot.startBot()
+    except Exception as error:
+        raise error
