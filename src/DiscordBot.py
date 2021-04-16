@@ -1,12 +1,14 @@
-import random
 import os
 import common.Logger as logLib
+
+from common.Dicer import Dicer
 from discord.ext.commands import Bot
 from discord import Game
 
 
 class DiscordBot():
     logger = logLib.loggingOverride(__name__)
+    dicer = Dicer()
 
     BOT = Bot(command_prefix="!")
     DISCORD_TOKEN = None
@@ -20,84 +22,47 @@ class DiscordBot():
     }
 
     def __init__(self):
-        if (self.setDiscordToken() and self.setTextPrefix()):
-            self.configBot()
+
+        self.setDiscordToken()
+        self.setTextPrefix()
+        self.configBot()
 
     @staticmethod
     def getBot():
         return DiscordBot.BOT
 
-    @staticmethod
-    def throwDices(diceQty, fearDice, bonusDice):
-        diceQty = int(diceQty)
-        fearDice = int(fearDice)
-        bonusDice = int(bonusDice)
-
-        diceCount = 0
-        fearCount = 0
-        returnMessage = "Result:\n"
-
-        if (diceQty < 1):
-            returnMessage = "# Invalid dice quantity"
-            return returnMessage
-        if (fearDice < 1):
-            fearDice = 1
-        if (bonusDice < 0):
-            bonusDice = 0
-        elif bonusDice > 2:
-            returnMessage = "# Invalid bonus value!"
-            return returnMessage
-
-        while diceCount < diceQty:
-            diceResult = random.randint(1, 6)
-            diceResult = diceResult + bonusDice
-            if (diceResult > 6):
-                diceResult = 6
-
-            if (fearCount < fearDice):
-                returnMessage = returnMessage + "- " + str(diceResult) + "\n"
-                fearCount += 1
-            else:
-                if (diceResult == 6):
-                    returnMessage = returnMessage + "+ " + str(diceResult) + "\n"
-                else:
-                    returnMessage = returnMessage + "# " + str(diceResult) + "\n"
-
-            diceCount += 1
-        pass
-
-        return returnMessage
-
     def setDiscordToken(self):
         try:
             self.DISCORD_TOKEN = os.environ["DISCORD_TOKEN"]
-            return True
         except KeyError:
-            self.logger.error(self.errorHandleMessages[1000])
-            return False
+            errorMessage = self.errorHandleMessages[1000]
+            self.logger.error(errorMessage)
+            raise KeyError(errorMessage)
 
     def setTextPrefix(self):
         try:
             self.TEXT_PREFIX = os.environ["TEXT_PREFIX"]
-            return True
         except KeyError:
             self.TEXT_PREFIX = "!sd-"
-            self.logger.error(self.errorHandleMessages[1001])
-            return True
+            self.logger.info(self.errorHandleMessages[1001])
 
     def configBot(self):
         self.BOT.command_prefix = self.TEXT_PREFIX
 
     def startBot(self):
         try:
+            errorMessage = ""
             if (self.DISCORD_TOKEN != ""):
                 self.BOT.run(self.DISCORD_TOKEN)
             else:
-                self.logger.error(self.errorHandleMessages[1000])
-                return False
+                errorMessage = self.errorHandleMessages[1000]
+                self.logger.error(errorMessage)
+                raise Exception(errorMessage)
         except:
-            self.logger.error(self.errorHandleMessages[1002])
-            return False
+            if (errorMessage == ""):
+                errorMessage = self.errorHandleMessages[1002]
+            self.logger.error(errorMessage)
+            raise Exception(errorMessage)            
 
     @staticmethod
     @BOT.event
@@ -111,8 +76,10 @@ class DiscordBot():
         DiscordBot.logger.info(
             DiscordBot.errorHandleMessages[1003],
             extra={
-                "command": ctx.command.name
+                "command": ctx.command.name,
+                "error": error
             })
+        
         returnMessage = "- Command Error " + ctx.prefix + ctx.command.name + \
                         "\n- Type !sd-help " + ctx.command.name + " to get instructions!"
         await ctx.channel.send(ctx.message.author.mention + "\n" + "```diff\n" + returnMessage + "\n```")
@@ -120,7 +87,7 @@ class DiscordBot():
     @staticmethod
     @BOT.command(name="resource",
                  brief="Throw Resource Dices",
-                 description="!sd-resource <qty of fear dices> <qty of bonus>",
+                 description="!sd-resource < qty of fear dices > < qty of bonus - between 0 and 2 >",
                  aliases=["r"],
                  pass_context=True)
     async def sdResource(ctx, fearDice, bonusDice):
@@ -130,12 +97,12 @@ class DiscordBot():
             return
 
         await ctx.channel.send(ctx.message.author.mention + "\n" + "```diff\n" +
-                               DiscordBot.throwDices(4, int(fearDice), int(bonusDice)) + "\n```")
+                               DiscordBot.dicer.executeAction(4, int(fearDice), int(bonusDice)) + "\n```")
 
     @staticmethod
     @BOT.command(name="action",
                  brief="Throw action dices",
-                 description="!sd-action - <qty of action dices> <qty fear dices> <qty of bonus>",
+                 description="!sd-action - <qty of action dices - greater than 0 > <qty fear dices > < qty of bonus - between 0 and 2 >",
                  aliases=["a"],
                  pass_context=True)
     async def sdAction(ctx, diceQty, fearDice, bonusDice):
@@ -145,4 +112,4 @@ class DiscordBot():
             return
 
         await ctx.channel.send(ctx.message.author.mention + "\n" + "```diff\n" +
-                               DiscordBot.throwDices(int(diceQty), int(fearDice), int(bonusDice)) + "\n```")
+                               DiscordBot.dicer.executeAction(int(diceQty), int(fearDice), int(bonusDice)) + "\n```")
