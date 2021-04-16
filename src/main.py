@@ -1,12 +1,11 @@
-from src.DiscordBot import DiscordBot
-
+from DiscordBot import DiscordBot
 
 class SdBot:
     # DEFAULT CONSTANT VALUES
     errorHandleMessages = {
     }
 
-    def startBot(self):
+    def startBot(self):        
         discordbot = DiscordBot()
         discordbot.startBot()
 

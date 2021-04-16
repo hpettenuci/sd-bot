@@ -1,10 +1,13 @@
 import random
 import os
+import common.Logger as logLib
 from discord.ext.commands import Bot
 from discord import Game
 
 
 class DiscordBot():
+    logger = logLib.loggingOverride(__name__)
+
     BOT = Bot(command_prefix="!")
     DISCORD_TOKEN = None
     TEXT_PREFIX = None
@@ -12,7 +15,8 @@ class DiscordBot():
     errorHandleMessages = {
         1000: "Error to get Discord Token",
         1001: "Text Prefix not set! Using default value",
-        1002: "Error to start Discord Bot"
+        1002: "Error to start Discord Bot",
+        1003: "Command Error"
     }
 
     def __init__(self):
@@ -69,7 +73,7 @@ class DiscordBot():
             self.DISCORD_TOKEN = os.environ["DISCORD_TOKEN"]
             return True
         except KeyError:
-            print(self.errorHandleMessages[1000])
+            self.logger.error(self.errorHandleMessages[1000])
             return False
 
     def setTextPrefix(self):
@@ -78,7 +82,7 @@ class DiscordBot():
             return True
         except KeyError:
             self.TEXT_PREFIX = "!sd-"
-            print(self.errorHandleMessages[1001])
+            self.logger.error(self.errorHandleMessages[1001])
             return True
 
     def configBot(self):
@@ -89,23 +93,26 @@ class DiscordBot():
             if (self.DISCORD_TOKEN != ""):
                 self.BOT.run(self.DISCORD_TOKEN)
             else:
-                print(self.errorHandleMessages[1000])
+                self.logger.error(self.errorHandleMessages[1000])
                 return False
         except:
-            print(self.errorHandleMessages[1002])
+            self.logger.error(self.errorHandleMessages[1002])
             return False
 
     @staticmethod
     @BOT.event
     async def on_ready():
         await DiscordBot.getBot().change_presence(activity=Game(name="The ShotGun Diaries RPG"))
-        print("Bot Online!")
+        DiscordBot.logger.info("Bot Online!")
 
     @staticmethod
     @BOT.event
     async def on_command_error(ctx, error):
-        print(ctx.message)
-        print(ctx.command)
+        DiscordBot.logger.info(
+            DiscordBot.errorHandleMessages[1003],
+            extra={
+                "command": ctx.command.name
+            })
         returnMessage = "- Command Error " + ctx.prefix + ctx.command.name + \
                         "\n- Type !sd-help " + ctx.command.name + " to get instructions!"
         await ctx.channel.send(ctx.message.author.mention + "\n" + "```diff\n" + returnMessage + "\n```")
