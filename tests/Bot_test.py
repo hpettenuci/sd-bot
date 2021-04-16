@@ -1,14 +1,10 @@
-import os, re
+import os, pytest
 
 from src.DiscordBot import DiscordBot
 
 class TestBot():
     os.environ["DISCORD_TOKEN"] = 'TOKEN' 
     
-    def test_SetBotToken(self):                
-        discordBot = DiscordBot()
-        assert discordBot.DISCORD_TOKEN == 'TOKEN'
-
     def test_AutoSetBotPrefix(self):        
         os.unsetenv("TEXT_PREFIX")
         discordBot = DiscordBot()
@@ -19,32 +15,27 @@ class TestBot():
         discordBot = DiscordBot()
         assert discordBot.TEXT_PREFIX == '!'
 
-    def test_InvalidDiceThrowed(self):
+    def test_SetBotToken(self):                
         discordBot = DiscordBot()
-        diceQty = 0
-        bonusDice = 0
-        fearDice = 0
-        assert '# Invalid dice quantity' in discordBot.throwDices(diceQty,fearDice,bonusDice) 
+        discordBot.setDiscordToken()
+        assert discordBot.DISCORD_TOKEN == 'TOKEN'
 
-    def test_InvalidBonusThrowed(self):
+    def test_EmptyBotToken(self):                
+        os.unsetenv("DISCORD_TOKEN")
         discordBot = DiscordBot()
-        diceQty = 1
-        bonusDice = 3
-        fearDice = 0
-        assert '# Invalid bonus value' in discordBot.throwDices(diceQty,fearDice,bonusDice)
+        discordBot.setDiscordToken()
+        assert discordBot.DISCORD_TOKEN == 'TOKEN'
 
-    def test_MinimumFearThrowed(self):
-        discordBot = DiscordBot()
-        diceQty = 1
-        bonusDice = 0
-        fearDice = 0
-        assert re.search(r"- [1-6]",discordBot.throwDices(diceQty,fearDice,bonusDice))
+    def test_StartInvalidToken(self):
+        with pytest.raises(Exception) as excinfo:   
+            discordBot = DiscordBot()
+            discordBot.DISCORD_TOKEN = ""
+            discordBot.startBot()                
+            assert self.sdBot.errorHandleMessages[1000] in str(excinfo.value)
 
-    def test_ThrowFiveDices(self):
-        discordBot = DiscordBot()
-        diceQty = 5
-        bonusDice = 0
-        fearDice = 0
-
-        result = discordBot.throwDices(diceQty,fearDice,bonusDice)
-        assert result.count('\n') == 6
+    def test_StartValidToken(self):
+        with pytest.raises(Exception) as excinfo:    
+            os.environ["DISCORD_TOKEN"] = 'TOKEN'
+            discordBot = DiscordBot()            
+            discordBot.startBot()
+            assert self.sdBot.errorHandleMessages[1003] in str(excinfo.value)
