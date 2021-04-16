@@ -13,7 +13,7 @@ def loggingOverride(name: str,logLevel=logging.INFO):
     }'''
 
     logger = logging.getLogger(name)
-    logger.setLevel(logging.INFO)    
+    logger.setLevel(logLevel)    
     formatter = JsonFormatter(
         STRING_FORMAT,
         mix_extra=True,
