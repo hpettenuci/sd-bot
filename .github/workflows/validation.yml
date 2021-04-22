@@ -87,4 +87,4 @@ jobs:
 
       - name: Smoke test docker image
         run: |
-          docker run --rm sd_bot:test -e DISCORD_TOKEN=SMOKE
+          docker run --rm -e DISCORD_TOKEN=SMOKE sd_bot:test
