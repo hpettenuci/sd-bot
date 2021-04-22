@@ -1,4 +1,4 @@
-name: PR Validation
+name: Validation sd_bot
 on:
   push:
     branches: [ main ]      
@@ -6,9 +6,6 @@ on:
     branches: [ main ]
   schedule:
     - cron: '20 22 * * 5'
-
-env:
-  PYTHON_VERSION: 3.8
 
 jobs:
   analyze:
@@ -30,6 +27,7 @@ jobs:
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v1
+
   validation:
     name: PR Validation
     runs-on: ubuntu-latest
@@ -38,29 +36,36 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
 
-    - name: Configure Python Version
+    - name: Setup Python
       uses: actions/setup-python@v2
       with:
-        python-version: ${{ env.PYTHON_VERSION }}
-    
-    - name: Cache pip
-      uses: actions/cache@v2
-      with:
-        path: ~/.cache/pip
-        key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
-        restore-keys: |
-          ${{ runner.os }}-pip-
-          ${{ runner.os }}-
+        python-version: 3.7
 
-    - name: Install dependencies
+    - name: Install dependencies with pipenv
       run: |
         python -m pip install --upgrade pip
-        pip install flake8 pytest pytest-cov pipenv
-        pipenv lock -r > requirements.txt && pip install -r requirements.txt 
+        pip install pipenv
+        pipenv install --deploy --dev
 
-    - name: Test pytest
+    - name: Check imports with isort
       run: |
-        python setup.py test
+        pipenv run isort --recursive --diff .
+    
+    - name: Check code format with black
+      run: |
+        pipenv run black --check .
+
+    - name: Check code lint with flake8
+      run: |
+        pipenv run flake8
+
+    - name: Check static type with mypy
+      run: |
+        pipenv run mypy
+
+    - name: Testing with pytest
+      run: |
+        pipenv run pytest --doctest-modules --junitxml=reports/test-results.xml --cov=./ --cov-report=xml:reports/coverage.xml --cov-config=.coveragerc --verbose
 
     - uses: testspace-com/setup-testspace@v1
       name: Install Testspace
@@ -71,3 +76,15 @@ jobs:
     - name: Push result to Testspace server
       run: |
         testspace reports/*.xml
+
+  docker-image:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Build docker image
+        run: docker build . -t sd_bot:test
+
+      - name: Smoke test docker image
+        run: |
+          docker run --rm -e DISCORD_TOKEN=SMOKE sd_bot:test

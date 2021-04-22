@@ -30,3 +30,21 @@ This is a Discord Bot to help masters and players on Shootgun Diaries RPG campai
 
 - **DISCORD_TOKEN** (required) - Discord Bot token
 - **TEXT_PREFIX** (optional) - Text prefix to recognize bot commands (Default: !sd-)
+
+---
+
+## Setup
+```sh
+# Install pipx if pipenv and cookiecutter are not installed
+python3 -m pip install pipx
+
+# Install pipenv using pipx
+pipx install pipenv
+
+# Install dependencies
+pipx run pipenv install --dev
+
+# Setup pre-commit and pre-push hooks
+pipx run pipenv run pre-commit install -t pre-commit
+pipx run pipenv run pre-commit install -t pre-push
+```
