@@ -1,49 +1,54 @@
 import random
-import common.Logger as logLib
+import sys
 
-class Dicer():
+from sd_bot.common.Logger import Logger
+
+
+class Dicer:
+    logLib = Logger()
     logger = logLib.loggingOverride(__name__)
+    sys.excepthook = logLib.exception_handler
 
-    @staticmethod    
-    def validateDiceQty(diceQty:int):
-        if (diceQty < 1):
+    @staticmethod
+    def validateDiceQty(diceQty: int):
+        if diceQty < 1:
             raise ValueError("#Invalid dice quantity")
 
     @staticmethod
-    def validateFearDice(fearDice:int) -> int:
-        if (fearDice < 1):
+    def validateFearDice(fearDice: int) -> int:
+        if fearDice < 1:
             fearDice = 1
         return fearDice
 
     @staticmethod
-    def validateBonusDice(bonusDice:int) -> int:
-        if (bonusDice < 0):
+    def validateBonusDice(bonusDice: int) -> int:
+        if bonusDice < 0:
             bonusDice = 0
         elif bonusDice > 2:
             raise ValueError("#Invalid bonus value")
         return bonusDice
 
     @staticmethod
-    def throwDice(bonusDice:int) -> int:
+    def throwDice(bonusDice: int) -> int:
         diceResult = random.randint(1, 6) + bonusDice
-        if (diceResult > 6):
+        if diceResult > 6:
             diceResult = 6
         return diceResult
-        
+
     @staticmethod
-    def formatResult(diceValue:int) -> str:
-        if (diceValue == 6):
+    def formatResult(diceValue: int) -> str:
+        if diceValue == 6:
             returnMessage = "+ " + str(diceValue) + "\n"
         else:
             returnMessage = "# " + str(diceValue) + "\n"
         return returnMessage
 
     @staticmethod
-    def setDiceAsFear(diceValue:int) -> str:
+    def setDiceAsFear(diceValue: int) -> str:
         return "- " + str(diceValue) + "\n"
 
     @staticmethod
-    def executeAction(diceQty:int, fearDice:int, bonusDice:int) -> str:
+    def executeAction(diceQty: int, fearDice: int, bonusDice: int) -> str:
         try:
             diceCount = 0
             fearCount = 0
@@ -53,10 +58,10 @@ class Dicer():
             fearDice = Dicer.validateFearDice(fearDice)
             bonusDice = Dicer.validateBonusDice(bonusDice)
 
-            while (diceCount < diceQty):
+            while diceCount < diceQty:
                 diceValue = Dicer.throwDice(bonusDice)
 
-                if (fearCount < fearDice):
+                if fearCount < fearDice:
                     returnMessage = returnMessage + Dicer.setDiceAsFear(diceValue)
                     fearCount += 1
                 else:
@@ -65,6 +70,6 @@ class Dicer():
                 diceCount += 1
 
             return returnMessage
-        except Exception  as error:
+        except Exception as error:
             Dicer.logger.info(error)
             raise error

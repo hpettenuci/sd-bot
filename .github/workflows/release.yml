@@ -1,4 +1,4 @@
-name: Generate Version
+name: Release sd_bot
 on:
   push:
     branches: [ main ]
@@ -21,8 +21,8 @@ jobs:
       id: bump_version
       run: |
         sudo npm install -g standard-version@9.1.0
-        git config --global user.email "sd@bot.com"
-        git config --global user.name "sd-bot"
+        git config --global user.email "sd_bot@bot.com"
+        git config --global user.name "sd_bot"
         standard-version -t ''
         git push --follow-tags
         echo ::set-output name=tag_name::$(git describe HEAD --abbrev=0)

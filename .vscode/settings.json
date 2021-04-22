@@ -5,8 +5,7 @@
     "files.trimFinalNewlines": true,
     "workbench.editor.highlightModifiedTabs": true,
     "conventionalCommits.scopes": [
-        "docker",
-        "discord-bot"
+        "sd_bot"
     ],
     "conventionalCommits.autoCommit": false,
     "python.pythonPath": "/usr/bin/python3"
