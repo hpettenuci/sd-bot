@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.2](https://github.com/hpettenuci/sd-bot/compare/1.1.1...1.1.2) (2021-04-22)
+
+
+### Bug Fixes
+
+* improve smoke tests ([f6e5af4](https://github.com/hpettenuci/sd-bot/commit/f6e5af40dfc1ddb02f49f17a8f07d55b4a611ddb))
+
 ### [1.1.1](https://github.com/hpettenuci/sd-bot/compare/1.1.0...1.1.1) (2021-04-16)
 
 
