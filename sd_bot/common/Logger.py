@@ -4,14 +4,14 @@ import sys
 from jsonformatter import JsonFormatter
 
 
-class Logger:
+class BotLogger:
     def __init__(self):
-        self.logger = self.loggingOverride(__name__)
+        self.logger = self.logging_override(__name__)
 
-    def getLogger(self):
+    def get_logger(self):
         return self.logger
 
-    def loggingOverride(self, name: str, logLevel=logging.WARNING):
+    def logging_override(self, name: str, log_level=logging.WARNING):
         STRING_FORMAT = """{
             "datetime": "asctime",
             "levelName": "levelname",
@@ -22,14 +22,14 @@ class Logger:
         }"""
 
         self.logger = logging.getLogger(name)
-        self.logger.setLevel(logLevel)
+        self.logger.setLevel(log_level)
         formatter = JsonFormatter(
             STRING_FORMAT, mix_extra=True, mix_extra_position="tail"
         )
 
         sh = logging.StreamHandler()
         sh.setFormatter(formatter)
-        sh.setLevel(logLevel)
+        sh.setLevel(log_level)
 
         self.logger.addHandler(sh)
 
@@ -42,5 +42,3 @@ class Logger:
             debug_hook(exception_type, exception, traceback)
         elif self.logger.level == logging.INFO:
             print(exception_type.__name__, exception)
-        else:
-            pass
