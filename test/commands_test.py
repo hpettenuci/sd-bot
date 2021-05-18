@@ -1,9 +1,5 @@
-from sd_bot.bot_commands import (
-    check_message_origin,
-    cmd_error,
-    cmd_resource,
-    cmd_action
-)
+from sd_bot.bot_commands import cmd_action, cmd_error, cmd_resource
+
 
 class TestCommands:
     def test_cmd_error(self):

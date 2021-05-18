@@ -3,6 +3,7 @@ import pytest
 from sd_bot.rpgrules.campaign import Campaign
 from sd_bot.rpgrules.note import Note
 
+
 class TestCampaign:
     def test_campaign_name(self):
         campaign = Campaign()
@@ -41,7 +42,9 @@ class TestCampaign:
             campaign = Campaign()
             zoombie_clock_minutes = 9
             campaign.set_zoombie_clock_interval(zoombie_clock_minutes)
-        assert "Zoombie Clock interval needs to be greater than 10" in str(excinfo.value)
+        assert "Zoombie Clock interval needs to be greater than 10" in str(
+            excinfo.value
+        )
 
     def test_zombie_clock(self):
         campaign = Campaign()
@@ -63,10 +66,7 @@ class TestCampaign:
 
     def test_set_notes(self):
         campaign = Campaign()
-        notes = [
-            Note('user','text1'), 
-            Note('user','text2')
-        ]
+        notes = [Note("user", "text1"), Note("user", "text2")]
         campaign.set_notes(notes)
         assert campaign.get_notes() == notes
 
@@ -124,7 +124,7 @@ class TestCampaign:
         assert campaign.get_supplies() == supplies - 1
         assert campaign.get_zoombie_clock() == zoombie_clock + 1
 
-    def test_tick_zoombie_clock(self):
+    def test_tick_zoombie_clock_reset(self):
         campaign = Campaign()
         supplies = 4
         refuge_level = 3
@@ -148,27 +148,23 @@ class TestCampaign:
         zoombie_clock_minutes = 10
         campaign.set_supplies(supplies)
         campaign.set_refuge(refuge_level)
-        campaign.set_zoombie_clock(zoombie_clock)        
+        campaign.set_zoombie_clock(zoombie_clock)
         campaign.set_zoombie_clock_interval(zoombie_clock_minutes)
         event1 = campaign.start_clock()
         event2 = campaign.start_clock()
 
-        assert event1 not in campaign.queue_clock() 
-        assert event2 in campaign.queue_clock() 
+        assert event1 not in campaign.queue_clock()
+        assert event2 in campaign.queue_clock()
 
     def test_create_campaign(self):
         campaign = Campaign()
         name = "name"
         master = "master"
         zoombie_clock_minutes = 10
-        campaign.create_campaign(
-            name,
-            master,
-            zoombie_clock_minutes
-        )
+        campaign.create_campaign(name, master, zoombie_clock_minutes)
         assert campaign.get_name() == name
         assert campaign.get_master() == master
         assert campaign.get_zoombie_clock_interval() == zoombie_clock_minutes
         assert campaign.get_refuge() == 0
-        assert campaign.get_supplies() == 0 
+        assert campaign.get_supplies() == 0
         assert campaign.get_zoombie_clock() == 0

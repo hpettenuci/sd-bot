@@ -79,4 +79,7 @@ class TestDicer:
         fear_result = re.findall(r"- [1-6]", dice_result)
         success_result = re.findall(r"\+ [1-6]", dice_result)
         conventional_result = re.findall(r"# [1-6]", dice_result)
-        assert len(fear_result) + len(success_result) + len(conventional_result) == dice_qty
+        assert (
+            len(fear_result) + len(success_result) + len(conventional_result)
+            == dice_qty
+        )

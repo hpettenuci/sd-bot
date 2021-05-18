@@ -4,14 +4,13 @@ import sys
 from discord import Game
 from discord.ext.commands import Bot
 
-from sd_bot.common.logger import BotLogger
-
 from sd_bot.bot_commands import (
     check_message_origin,
+    cmd_action,
     cmd_error,
     cmd_resource,
-    cmd_action
 )
+from sd_bot.common.logger import BotLogger
 
 
 class DiscordBot:
@@ -89,7 +88,7 @@ class DiscordBot:
         )
         await ctx.channel.send(
             cmd_error(ctx.message.author.mention, ctx.prefix, ctx.command.name)
-        )  
+        )
 
     @staticmethod
     @BOT.command(
@@ -103,7 +102,7 @@ class DiscordBot:
         if check_message_origin(ctx):
             await ctx.channel.send(
                 cmd_resource(ctx.message.author.mention, fear_dice, bonus_dice)
-            )        
+            )
 
     @staticmethod
     @BOT.command(
@@ -117,4 +116,4 @@ class DiscordBot:
         if check_message_origin(ctx):
             await ctx.channel.send(
                 cmd_action(ctx.message.author.mention, dice_qty, fear_dice, bonus_dice)
-            )   
+            )

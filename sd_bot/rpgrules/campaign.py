@@ -1,7 +1,7 @@
 import sched
 import time
-
 from typing import List
+
 from sd_bot.rpgrules.note import NoteList
 
 
@@ -12,11 +12,7 @@ class Campaign:
     scheduler = sched.scheduler(time.time, time.sleep)
 
     def create_campaign(
-        self, 
-        name: str,
-        master: str,
-        zoombie_clock_minutes: int
-
+        self, name: str, master: str, zoombie_clock_minutes: int
     ) -> None:
         self.set_name(name)
         self.set_master(master)
@@ -27,17 +23,17 @@ class Campaign:
 
     def set_name(self, name: str) -> None:
         if not name.strip():
-            raise ValueError("Campaign name cannot be Empty")    
+            raise ValueError("Campaign name cannot be Empty")
         self.name = name
 
     def get_name(self) -> str:
-        return self.name    
+        return self.name
 
     def set_master(self, master: str) -> None:
         if not master.strip():
-            raise ValueError("Campaign master cannot be Empty")    
+            raise ValueError("Campaign master cannot be Empty")
         self.master = master
-    
+
     def get_master(self) -> str:
         return self.master
 
@@ -60,14 +56,14 @@ class Campaign:
     def increment_zoombie_clock(self) -> None:
         self.zoombie_clock += 1
 
-    def tick_zoombie_clock(self) -> str:
+    def tick_zoombie_clock(self):
         self.increment_zoombie_clock()
         self.remove_supplies(1)
 
         if self.get_refuge() <= self.get_zoombie_clock():
             self.set_zoombie_clock()
             return "Refuge invasion!"
-        else: 
+        else:
             return "Refuge still safe!"
 
     def set_notes(self, notes: NoteList) -> None:
@@ -76,7 +72,7 @@ class Campaign:
     def get_notes(self) -> NoteList:
         return self.notes
 
-    def set_supplies(self, supplies: int) -> None:    
+    def set_supplies(self, supplies: int) -> None:
         self.supplies = supplies
 
     def get_supplies(self) -> int:
@@ -86,9 +82,9 @@ class Campaign:
         self.supplies += supplies
 
     def remove_supplies(self, supplies: int) -> None:
-        if (self.supplies - supplies ) > 0:
+        if (self.supplies - supplies) > 0:
             self.supplies -= supplies
-        else: 
+        else:
             self.supplies = 0
 
     def set_refuge(self, refuge: int) -> None:
@@ -103,10 +99,12 @@ class Campaign:
         return self.scheduler.queue
 
     def start_clock(self) -> sched.Event:
-        if not self.scheduler.empty():        
+        if not self.scheduler.empty():
             self.stop_clock()
         self.scheduler.run()
-        return self.scheduler.enter(self.get_zoombie_clock_interval(), 1, self.tick_zoombie_clock())
+        return self.scheduler.enter(
+            self.get_zoombie_clock_interval(), 1, self.tick_zoombie_clock()
+        )
 
     def stop_clock(self) -> None:
         for event in self.queue_clock():

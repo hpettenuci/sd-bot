@@ -8,8 +8,8 @@ class TestNotes:
         user = "USER"
         text = "TEXT"
         note = Note(user, text)
-        assert note['user'] == user
-        assert note['text'] == text
+        assert note["user"] == user
+        assert note["text"] == text
 
     def test_note_empty_user(self):
         with pytest.raises(ValueError) as excinfo:
@@ -27,14 +27,14 @@ class TestNotes:
 
     def test_add_note(self):
         notes = NoteList()
-        user = '@123'
-        text = 'Test Note'
-        note_id = notes.add_note(user,text)
+        user = "@123"
+        text = "Test Note"
+        note_id = notes.add_note(user, text)
         assert notes.get_note_text(note_id) == text
 
     def test_get_note_list(self):
         notes = NoteList()
-        user_id = '@123'
-        notes.add_note(user_id,"note1")
-        notes.add_note(user_id,"note2")
+        user_id = "@123"
+        notes.add_note(user_id, "note1")
+        notes.add_note(user_id, "note2")
         assert len(notes) == 2
